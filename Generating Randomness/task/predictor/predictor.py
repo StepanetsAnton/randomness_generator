@@ -1,3 +1,5 @@
+import random
+
 user_data = ""
 temp = ""
 while len(user_data)<100:
@@ -37,5 +39,33 @@ for element in sliced:
                     triads_followed_by_1.update({triad:(temp+1)})
 
 print()
-for triad in triads:
-    print(triad+": "+str(triads_followed_by_0[triad])+","+str(triads_followed_by_1[triad]))
+
+test_string = ""
+while len(test_string) < 4:
+    test_string=str(input("Please enter a test string containing 0 or 1:"))
+
+max_poss=len(test_string)-3
+pred_count=0
+prediction=""
+
+sliced2 = [test_string[symbol:symbol+4] for symbol in range(0, len(test_string))]
+for element in sliced2:
+    if len(element)==4:
+        for triad in triads:
+            if element.startswith(triad):
+                if triads_followed_by_0[triad]>triads_followed_by_1[triad]:
+                    prediction+="0"
+                    if element[3]=="0":
+                        pred_count+=1
+                elif triads_followed_by_0[triad]<triads_followed_by_1[triad]:
+                    prediction+="1"
+                    if element[3]=="1":
+                        pred_count+=1
+                else:
+                    rand = random.choice(["0","1"])
+                    prediction+=rand
+                    if element[3]==rand:
+                        pred_count+=1
+
+print("predictions:\n"+prediction)
+print("Computer guessed "+str(pred_count)+" out of "+str(len(test_string))+" symbols right ("+str(pred_count/max_poss*100)+" %)")
